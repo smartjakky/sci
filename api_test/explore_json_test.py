@@ -1,22 +1,18 @@
 import requests
 import json
-from urllib.parse import urlencode
+from urllib.parse import urlencode, unquote, unquote_plus
 
 
 def get_explore_json(host, port=80, force='true'):
     cookies = {
-        "JSESSIONID": "534399BC981ED06ECE0B517ABB8835B5",
-        "language": "zh-CN",
-        "session": ".eJwlzTEOwyAMQNG7eGbAJNiQyyAXbLVq1EiQTFXuXqTu_-l_oVjX8YTt7Jc6KK8GG5jQgkw5ekEJzDEZrr4u0WfKmiI4qKNbOY-3fmZP9vAcuVVsnpuFVTD6yjnVNZMkFCNUajjdflTZdZoJHVxD-38Z4P4BEgEn8A.DVm6QQ.3a0cB2zBGYX969_CU2ghzHy9GIg"
+        "session": ".eJx9z8tuwyAQheF3mbVlLgEb8ypRZQEzxCi0toA0iqK8e4nadff_d6TzhDUWqhvYVm40wJoQLBinI9EigneT5t6gRhTOx2Amc1ITwgChlri2_UpfvRecTzIoF6VHotlov2ivFCehFk7zgjO6IOLb5T24TN10OMDhLrRuqba9PMCeYWvtsIwJPgopRzmPSlnDxYnVkNitUqks95p1-m9acwr0uSPl70T3P_MxwHvi96KE1w-H5kvz.DXaeFg.O68cESiTo16EgSqFPdNc3UHDmBw"
     }
-
     headers = {
         "Accept": "application/json, text/plain, */*",
         "Accept-Encoding": "gzip, deflate",
         "Accept-Language": "zh-CN,zh;q=0.8",
         "Connection": "keep-alive",
         "content-type": "application/json",
-        "Cookie": "session=.eJwlzTEOwyAMQNG7eGbAJNiQyyAXbLVq1EiQTFXuXqTu_-l_oVjX8YTt7Jc6KK8GG5jQgkw5ekEJzDEZrr4u0WfKmiI4qKNbOY-3fmZP9vAcuVVsnpuFVTD6yjnVNZMkFCNUajjdflTZdZoJHVxD-38Z4P4BEgEn8A.DVm6QQ.3a0cB2zBGYX969_CU2ghzHy9GIg; language=zh-CN; JSESSIONID=534399BC981ED06ECE0B517ABB8835B5",
         "User-Agent": "Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/61.0.3163.100 Safari/537.36",
     }
 
@@ -27,7 +23,7 @@ def get_explore_json(host, port=80, force='true'):
         form_data = json.loads(content)
         print(form_data['datasource'].split('__')[0])
         url = host + path.format(form_data['datasource'].split('__')[0]) + '?' + urlencode({'form_data': content, 'force': force})
-        print(url)
+        print(unquote_plus(url))
     res = requests.get(url, headers=headers, cookies=cookies)
 
     print(res.status_code)
@@ -39,6 +35,7 @@ def get_explore_json(host, port=80, force='true'):
 if __name__ == '__main__':
     # sql = get_explore_json('10.122.22.113')
     # sql = get_explore_json('10.122.27.44', 8088)
-    sql = get_explore_json('127.0.0.1', 8088)
+    # sql = get_explore_json('127.0.0.1', 8088)
     # sql = get_explore_json('10.122.27.44', 8013)
+    sql = get_explore_json('10.122.27.44', 8088)
     print(sql)
